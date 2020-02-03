@@ -1,0 +1,74 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width">
+    <title>repl.it</title>
+    <link href="style.css" rel="stylesheet" type="text/css">
+    <link href="bulma.min.css" rel="stylesheet" type="text/css">
+  </head>
+  <body>
+    <div id="app">
+      <div class="notification has-text-success has-text-centered">
+        <h1 class="is-size-1">Class Grade: <p class="has-text-success" id="classGrade">{{ classGrade }}%</p></h1>
+      </div>
+      <div class="columns">
+        <div class="column">
+          <div class="field">
+            <div class="field">
+              <h3 class="is-size-5">Add Assignment Categories:</h3>
+            </div>
+            <label class="label">Category Weight (%)</label>
+            <input v-model="weight" class="input">
+          </div>
+          <div class="field">
+              <label class="label">Category Type</label>
+              <input v-model="type" class="input">
+          </div>
+          <div class="field">
+            <div class="field">
+              <button v-on:click="addWeight" class="button is-primary">Add Category</button>
+            </div>
+            <div class="field">
+              <ul>
+                <weights-comp v-for="weight in weights" :weight="weight">
+              </ul>
+            </div>
+          </div>
+        </div>
+        <div class="column">
+          <div class="field">
+            <h3 class="is-size-5">Add Assignments:</h3>
+          </div>
+          <div class="field">
+              <label class="label">Assignment Score Numerator</label>
+              <input v-model="fnum" class="input">
+            </div>
+          <div class="field">
+            <label class="label">Assignment Score Denominator</label>
+            <input v-model="snum" class="input">
+          </div>
+          <div class="field">
+            <label class="label">Assignment Category</label>
+            <!-- <input v-model="category" class="input"> -->
+            <div class="select">
+              <select @change="changeAssignmentCategory($event)">
+                <option value="" selected disabled>Choose</option>
+                <option v-for="weight in weights">{{ weight.category }}</option>
+              </select>
+            </div>
+          </div>
+          <div class="field">
+            <button v-on:click="addScore" class="button is-primary">Add Assignment</button>
+            <button v-on:click="calculateGrade" class="button is-success">Calculate</button>
+            <ul>
+              <percent-comp v-for="score in scores" :score="score">
+            </ul>
+          </div>
+        </div>
+      </div>
+    </div>
+    <script src="https://cdn.jsdelivr.net/npm/vue/dist/vue.js"></script>
+    <script src="script.js"></script>
+  </body>
+</html>
