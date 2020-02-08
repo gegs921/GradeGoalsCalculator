@@ -9,8 +9,15 @@
   </head>
   <body>
     <div id="app">
-      <div class="notification has-text-success has-text-centered">
-        <h1 class="is-size-1">Class Grade: <p class="has-text-success" id="classGrade">{{ classGrade }}%</p></h1>
+      <div class="notification">
+        <h1 class="is-size-1 has-text-centered">Class Grade: <p class="has-text-success" id="classGrade">{{ classGrade }}%</p></h1>
+        <div class="field">
+          <p class="is-size-4">Goal: {{ goalPercentage }}</p>
+          <input v-model="goalPercentage" class="input">
+        </div>
+        <div class="field">
+          <button class="button">Get Methods</button>
+        </div>
       </div>
       <div class="columns">
         <div class="column">
@@ -61,9 +68,11 @@
           <div class="field">
             <button v-on:click="addScore" class="button is-primary">Add Assignment</button>
             <button v-on:click="calculateGrade" class="button is-success">Calculate</button>
-            <ul>
-              <percent-comp v-for="score in scores" :score="score">
-            </ul>
+            <div class="field">
+              <ul>
+                <percent-comp v-for="score in scores" :score="score">
+              </ul>
+            </div>
           </div>
         </div>
       </div>

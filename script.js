@@ -113,6 +113,7 @@ let app = new Vue({
     weightsFull: false,
     classGrade: 0,
     category: '',
+    goalPercentage: '',
     idNum: 0,
   },
   methods: {
