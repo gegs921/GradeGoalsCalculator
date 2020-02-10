@@ -49,6 +49,7 @@ let weights = [
     pointsPossible: 0,
     pointsEarned: 0,
     score: 0,
+    maximumPossibleIncrease: 0,
     id: 4
   }, 
   {
@@ -57,6 +58,7 @@ let weights = [
     pointsPossible: 0,
     pointsEarned: 0,
     score: 0,
+    maximumPossibleIncrease: 0,
     id: 5
   }, 
   {
@@ -65,6 +67,7 @@ let weights = [
     pointsPossible: 0,
     pointsEarned: 0,
     score: 0,
+    maximumPossibleIncrease: 0,
     id: 6
   }
 ];
@@ -147,7 +150,8 @@ let app = new Vue({
           category: this.type,
           pointsPossible: 0, 
           pointsEarned: 0, 
-          score: 0, 
+          score: 0,
+          maximumPossibleIncrease: 0,
           id: this.idNum
         });
         this.idNum += 1;
@@ -190,6 +194,20 @@ let app = new Vue({
           })
         })
       })
+    },
+    calculateMethods: function() {
+      //Calculates the amount the score of a category can increase
+      function calculateMaxPossibleIncrease() {
+        weights.forEach((weight) => {
+          weight.maximumPossibleIncrease = weight.weight - weight.score;
+        });
+      }
+
+      function calculateAssignments() {
+        
+      }
+      
+      calculateMaxPossibleIncrease();
     }
   }
 })
