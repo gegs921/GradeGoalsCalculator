@@ -6,17 +6,18 @@
     <title>repl.it</title>
     <link href="style.css" rel="stylesheet" type="text/css">
     <link href="bulma.min.css" rel="stylesheet" type="text/css">
+    <script src="algebra.min.js"></script>
   </head>
   <body>
     <div id="app">
       <div class="notification">
         <h1 class="is-size-1 has-text-centered">Class Grade: <p class="has-text-success" id="classGrade">{{ classGrade }}%</p></h1>
         <div class="field">
-          <p class="is-size-4">Goal: {{ goalPercentage }}</p>
+          <p class="is-size-4">Goal: {{ goalPercentage }}%</p>
           <input v-model="goalPercentage" class="input">
         </div>
         <div class="field">
-          <button class="button">Get Methods</button>
+          <button class="button" v-on:click="calculateMethods">Get Methods</button>
         </div>
       </div>
       <div class="columns">

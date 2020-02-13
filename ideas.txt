@@ -1,1 +1,3 @@
 take the average of the percentages
+
+formula: .8 = .10 + .16 + .7t

@@ -1,3 +1,7 @@
+var Fraction = algebra.Fraction;
+var Expression = algebra.Expression;
+var Equation = algebra.Equation;
+
 Object.defineProperty(Array.prototype, "asyncForEach", {
     enumerable: false,
     value: function(task){
@@ -177,7 +181,7 @@ let app = new Vue({
       }).then(() => {
         weights.asyncForEach((weight2) => {
           if(weight2.pointsEarned === 0 && weight2.pointsPossible === 0) {
-            weight2.score = 1;
+            weight2.score = 0;
           }
           else {
             weight2.score = weight2.pointsEarned / weight2.pointsPossible;
@@ -200,14 +204,24 @@ let app = new Vue({
       function calculateMaxPossibleIncrease() {
         weights.forEach((weight) => {
           weight.maximumPossibleIncrease = weight.weight - weight.score;
+
+          console.log(weight.maximumPossibleIncrease)
         });
       }
 
-      function calculateAssignments() {
-        
+      function calculateNeededCategoryScoreIncrease() {
+        var expr = new Expression('t');
+        expr = expr.subtract(3);
+        expr = expr.add('t');
+
+        console.log(expr.toString());
+        weights.forEach((weight) => {
+          
+        });
       }
       
       calculateMaxPossibleIncrease();
+      calculateNeededCategoryScoreIncrease();
     }
   }
 })
