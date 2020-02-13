@@ -210,11 +210,15 @@ let app = new Vue({
       }
 
       function calculateNeededCategoryScoreIncrease() {
-        var expr = new Expression('t');
-        expr = expr.subtract(3);
-        expr = expr.add('t');
+        var x1 = algebra.parse("0.1 + 0.16 + 0.7t");
+        var x2 = algebra.parse("0.8");
 
-        console.log(expr.toString());
+        var eq = new Equation(x1, x2);
+        console.log(eq.toString());
+
+        var answer = eq.solveFor("t");
+
+        console.log("t = " + answer.toString());
         weights.forEach((weight) => {
           
         });
