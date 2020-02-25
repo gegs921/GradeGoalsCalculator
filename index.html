@@ -17,7 +17,20 @@
           <input v-model="goalPercentage" class="input">
         </div>
         <div class="field">
+          <label class="label">Assignment Category to Improve Upon</label>
+          <div class="select">
+            <select @change="changeAssignmentCategoryOfImprovement($event)">
+              <option value="" selected disabled>Choose</option>
+              <option v-for="weight in weights">{{ weight.category }}</option>
+            </select>
+          </div>
+        </div>
+        <div class="field">
           <button class="button" v-on:click="calculateMethods">Get Methods</button>
+        </div>
+        <div class="field">
+          <p>You need to raise your {{ selectedCategoryOfImprovement }} average to {{ percentageToRaise }}%
+          </p>
         </div>
       </div>
       <div class="columns">

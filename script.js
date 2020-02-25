@@ -1,7 +1,3 @@
-var Fraction = algebra.Fraction;
-var Expression = algebra.Expression;
-var Equation = algebra.Equation;
-
 Object.defineProperty(Array.prototype, "asyncForEach", {
     enumerable: false,
     value: function(task){
@@ -17,34 +13,27 @@ Object.defineProperty(Array.prototype, "asyncForEach", {
 });
 
 let scores = [
-  // {
-  //   fnum: 10, 
-  //   snum: 10, 
-  //   percentage: 100, 
-  //   category: 'hw', 
-  //   id: 1
-  // }, 
-  // {
-  //   fnum: 10, 
-  //   snum: 10, 
-  //   percentage: 100, 
-  //   category: 'tst', 
-  //   id: 2
-  // }, 
-  // {
-  //   fnum: 10, 
-  //   snum: 10, 
-  //   percentage: 100, 
-  //   category: 'prj', 
-  //   id: 3
-  // },
-  // {
-  //   fnum: 5,
-  //   snum: 10,
-  //   percentage: 50,
-  //   category: 'tst',
-  //   id: 7
-  // }
+  {
+    fnum: 10, 
+    snum: 10, 
+    percentage: 100, 
+    category: 'hw', 
+    id: 1
+  }, 
+  {
+    fnum: 8, 
+    snum: 10, 
+    percentage: 80, 
+    category: 'prj', 
+    id: 2
+  }, 
+  {
+    fnum: 7, 
+    snum: 10, 
+    percentage: 100, 
+    category: 'tst', 
+    id: 3
+  }
 ];
 let weights = [
   {
@@ -121,21 +110,24 @@ let app = new Vue({
     classGrade: 0,
     category: '',
     goalPercentage: '',
+    selectedCategoryOfImprovement: '',
+    percentageToRaise: 0,
+    neededScore: '',
     idNum: 0,
   },
   methods: {
     addScore: function() {
       if(isNaN(this.fnum) === false && isNaN(this.snum) === false && this.fnum !== '' && this.snum !== '') {
         scores.push({
-          fnum: parseInt(this.fnum, 10), 
-          snum: parseInt(this.snum, 10), 
+          fnum: parseFloat(this.fnum, 10), 
+          snum: parseFloat(this.snum, 10), 
           percentage: Math.round(this.fnum/this.snum*100), 
           category: this.category, 
           id: this.idNum
         })
         this.idNum += 1;
-        console.log(typeof(this.fnum));
-        console.log(typeof(this.snum));
+        // console.log(typeof(this.fnum));
+        // console.log(typeof(this.snum));
       }
     },
     addWeight: function() {
@@ -162,8 +154,11 @@ let app = new Vue({
       }
     },
     changeAssignmentCategory: function(event) {
-      console.log('ran');
+      // console.log('ran');
       this.category = event.target.options[event.target.options.selectedIndex].text;
+    },
+    changeAssignmentCategoryOfImprovement: function(event) {
+      this.selectedCategoryOfImprovement = event.target.options[event.target.options.selectedIndex].text;
     },
     calculateGrade: function() {
       let weightedScore = 0;
@@ -200,32 +195,81 @@ let app = new Vue({
       })
     },
     calculateMethods: function() {
+      const vm = this;
+      let weightsArr = [];
+      let selectedCategoryOfImprovement = this.selectedCategoryOfImprovement;
+      let goalPercentage = this.goalPercentage
       //Calculates the amount the score of a category can increase
       function calculateMaxPossibleIncrease() {
         weights.forEach((weight) => {
+
           weight.maximumPossibleIncrease = weight.weight - weight.score;
 
-          console.log(weight.maximumPossibleIncrease)
+          // console.log(weight.maximumPossibleIncrease)
         });
       }
 
       function calculateNeededCategoryScoreIncrease() {
-        var x1 = algebra.parse("0.1 + 0.16 + 0.7t");
-        var x2 = algebra.parse("0.8");
+        let side1Percentage = parseInt(goalPercentage, 10);
+        let side1 = side1Percentage / 100;
+        let multiplierWeight;
+        weights.asyncForEach((weight) => {
+          if(weight.category == selectedCategoryOfImprovement) {
+            multiplierWeight = weight.weight;
+          }
+          else if(weight.category !== selectedCategoryOfImprovement) {
+            weightsArr.push(weight.score);
+          }
+        }).then(() => {
+          let sum = 0;
+          weightsArr.asyncForEach((weight) => {
+            sum += weight;
+          }).then(() => {
+            side1 -= sum;
+            vm.percentageToRaise = (side1 / multiplierWeight) * 100;
+            multiplierWeight = 0;
+            sum = 0;
+          });
+        });
+      }
 
-        var eq = new Equation(x1, x2);
-        console.log(eq.toString());
+      function calculateAssignmentsNeeded() {
+        let categorySpecificScores = [];
+        let numScores = 0;
+        let numeratorSum = 0;
+        let denominatorSum = 0;
+        let numeratorAvg;
+        let denominatorAvg;
+        let percentageAvg;
+        scores.asyncForEach((score) => {
+          if(score.category == selectedCategoryOfImprovement) {
+            categorySpecificScores.push({
+              fnum: score.fnum, 
+              snum: score.snum
+            })
+          }
+        }).then(() => {
+          categorySpecificScores.asyncForEach((score) => {
+            // Do average code here
+            numScores += 1;
+            numeratorSum += score.fnum;
+            denominatorSum += score.snum;
+            numeratorAvg = numeratorSum/numScores;
+            denominatorAvg = denominatorSum/numScores;
 
-        var answer = eq.solveFor("t");
-
-        console.log("t = " + answer.toString());
-        weights.forEach((weight) => {
-          
+            // console.log(numeratorAvg, denominatorAvg);
+          }).then(() => {
+            let categoryPercentage = (numeratorSum / denominatorSum) * 100;
+            let step1 = vm.percentageToRaise * (numScores + 1);
+            let step2 = step1 - categoryPercentage;
+            console.log(step2);
+          })
         });
       }
       
       calculateMaxPossibleIncrease();
       calculateNeededCategoryScoreIncrease();
+      calculateAssignmentsNeeded();
     }
   }
 })
