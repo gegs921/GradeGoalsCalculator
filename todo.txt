@@ -1,1 +1,2 @@
-find the average of numerators and denominators for the scores
+Adding to the last function:
+  - Check if the value (x) or the non-given value is greater than 100%

@@ -82,7 +82,7 @@ Vue.component('weights-comp', {
 })
 
 Vue.component('percent-comp', {
-  template: '<li class="field">{{ score.category }}: {{ score.fnum }} / {{ score.snum }}: {{ score.percentage }}%<button v-on:click="deleteScore(score.id)" class="button">delete</button></li>',
+  template: '<li class="field">{{ score.category }}: {{ score.fnum }} / {{ score.snum }}: {{ score.percentage }}% <button v-on:click="deleteScore(score.id)" class="button">delete</button></li>',
   props: {
     score: Object
   },
@@ -113,11 +113,15 @@ let app = new Vue({
     selectedCategoryOfImprovement: '',
     percentageToRaise: 0,
     neededScore: '',
+    numAssignmentsToComplete: '',
+    finalAssignmentPercentage: '',
+    howButtonSectionVisible: false,
+    howSectionVisible: false,
     idNum: 0,
   },
   methods: {
     addScore: function() {
-      if(isNaN(this.fnum) === false && isNaN(this.snum) === false && this.fnum !== '' && this.snum !== '') {
+      if(isNaN(this.fnum) === false && isNaN(this.snum) === false && this.fnum !== '' && this.snum !== '' && this.category !== '') {
         scores.push({
           fnum: parseFloat(this.fnum, 10), 
           snum: parseFloat(this.snum, 10), 
@@ -135,12 +139,10 @@ let app = new Vue({
       for(let i=0; i < weights.length; i++) {
         if(sum !== 1) {
           sum = weights[i].weight + sum;
-        }
-        else if(sum === 1) {
-          this.weightsFull = true;
+          console.log(sum);
         }
       }
-      if(isNaN(this.weight) === false && this.weight !== '' && this.type !== '' && this.weightsFull === false) {
+      if(isNaN(this.weight) === false && this.weight !== '' && this.type !== '' && sum !== 1) {
         weights.push({
           weight: this.weight/100, 
           category: this.type,
@@ -195,6 +197,11 @@ let app = new Vue({
       })
     },
     calculateMethods: function() {
+      //error handling
+      if(this.goalPercentage === '' || isNaN(this.goalPercentage) === true || this.selectedCategoryOfImprovement)
+
+      this.howButtonSectionVisible = true;     
+
       const vm = this;
       let weightsArr = [];
       let selectedCategoryOfImprovement = this.selectedCategoryOfImprovement;
@@ -228,7 +235,7 @@ let app = new Vue({
             side1 -= sum;
             vm.percentageToRaise = (side1 / multiplierWeight) * 100;
             multiplierWeight = 0;
-            sum = 0;
+            sum = 0;       
           });
         });
       }
@@ -259,10 +266,35 @@ let app = new Vue({
 
             // console.log(numeratorAvg, denominatorAvg);
           }).then(() => {
-            let categoryPercentage = (numeratorSum / denominatorSum) * 100;
-            let step1 = vm.percentageToRaise * (numScores + 1);
-            let step2 = step1 - categoryPercentage;
-            console.log(step2);
+            let categoryPercentage;
+            let step1;
+            let step2;
+
+            let extraPercentage;
+            let numAssignments = 1;
+            function calculateAssignment() {
+              if(numAssignments === 1) {
+                categoryPercentage = (numeratorSum / denominatorSum) * 100;
+                step1 = vm.percentageToRaise * (numScores + 1);
+                step2 = Math.ceil(step1 - categoryPercentage);
+              }
+              else if(numAssignments > 1) {
+                categoryPercentage = (categoryPercentage + 100) / 2;
+                step1 = vm.percentageToRaise * (numScores + 1);
+                step2 = Math.ceil(step1 - categoryPercentage);
+              }
+              if(step2 > 100) {
+                extraPercentage = step2 - 100;
+                numAssignments += 1;
+                calculateAssignment();
+              }
+              else {
+                vm.numAssignmentsToComplete = numAssignments - 1;
+                vm.finalAssignmentPercentage = step2;
+                return;
+              }
+            }
+            calculateAssignment();
           })
         });
       }
@@ -270,6 +302,9 @@ let app = new Vue({
       calculateMaxPossibleIncrease();
       calculateNeededCategoryScoreIncrease();
       calculateAssignmentsNeeded();
+    },
+    showHowSection: function() {
+      this.howSectionVisible = true;
     }
   }
 })
