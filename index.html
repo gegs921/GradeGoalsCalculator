@@ -28,6 +28,9 @@
         <div class="field">
           <button class="button" v-on:click="calculateMethods">Get Methods</button>
         </div>
+        <div class="field">
+          {{ recommendedCategoryOfImprovement }}
+        </div>
         <div class="field" v-if="howButtonSectionVisible === true">
           <p>You need to raise your {{ selectedCategoryOfImprovement }} average to {{ percentageToRaise }}%
           </p>
