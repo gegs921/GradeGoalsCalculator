@@ -118,6 +118,14 @@ let app = new Vue({
     finalAssignmentPercentage: '',
     howButtonSectionVisible: false,
     howSectionVisible: false,
+    errorText: '',
+    errorType: '',
+    errorShown: false,
+    errorTypes: {
+      assignmentAdditionError: 1,
+      categoryAdditionError: 2,
+      goalCalculationError: 3,
+    },
     idNum: 0,
   },
   methods: {
@@ -131,8 +139,39 @@ let app = new Vue({
           id: this.idNum
         })
         this.idNum += 1;
+        this.errorShown = false;
         // console.log(typeof(this.fnum));
         // console.log(typeof(this.snum));
+      }
+      else if(isNaN(this.fnum) === true){
+        this.errorType = this.errorTypes.assignmentAdditionError;
+        this.errorText = "Assignment Score Numerator should be a number.";
+        this.errorShown = true;
+        return;
+      }
+      else if(isNaN(this.snum) === true) {
+        this.errorType = this.errorTypes.assignmentAdditionError;
+        this.errorText = "Assignment Score Denominator should be a number.";
+        this.errorShown = true;       
+        return; 
+      }
+      else if(this.fnum === '') {
+        this.errorType = this.errorTypes.assignmentAdditionError;
+        this.errorText = "Please enter an Assignment Score Numerator";
+        this.errorShown = true;       
+        return;         
+      }
+      else if(this.snum === '') {
+        this.errorType = this.errorTypes.assignmentAdditionError;
+        this.errorText = "Please enter an Assignment Score Denominator";
+        this.errorShown = true;       
+        return;        
+      }
+      else {
+        this.errorType = this.errorTypes.assignmentAdditionError;
+        this.errorText = "Please select an Assignment Category";
+        this.errorShown = true;       
+        return;
       }
     },
     addWeight: function () {
@@ -154,6 +193,30 @@ let app = new Vue({
           id: this.idNum
         });
         this.idNum += 1;
+      }
+      else if(isNaN(this.weight) === true) {
+        this.errorType = this.errorTypes.categoryAdditionError;
+        this.errorText = "Category Weight should be a number.";
+        this.errorShown = true;
+        return;
+      }
+      else if(this.weight === '') {
+        this.errorType = this.errorTypes.categoryAdditionError;
+        this.errorText = "Please enter a category weight.";
+        this.errorShown = true;
+        return;
+      }
+      else if(this.type === '') {
+        this.errorType = this.errorTypes.categoryAdditionError;
+        this.errorText = "Please enter a category type";
+        this.errorShown = true;
+        return;
+      }
+      else {
+        this.errorType = this.errorTypes.categoryAdditionError;
+        this.errorText = "The weights of the categories already have a sum of 100%";
+        this.errorShown = true;
+        return;
       }
     },
     changeAssignmentCategory: function (event) {
@@ -211,103 +274,126 @@ let app = new Vue({
     },
     calculateMethods: function () {
       //error handling
-      if (this.goalPercentage === '' || isNaN(this.goalPercentage) === true || this.selectedCategoryOfImprovement)
-        this.howButtonSectionVisible = true;
+      if (this.goalPercentage !== '' && isNaN(this.goalPercentage) === false && this.selectedCategoryOfImprovement !== '') {
+        console.log('ran');
+        const vm = this;
+        let weightsArr = [];
+        let selectedCategoryOfImprovement = this.selectedCategoryOfImprovement;
+        let goalPercentage = this.goalPercentage
+        //Calculates the amount the score of a category can increase
 
-      const vm = this;
-      let weightsArr = [];
-      let selectedCategoryOfImprovement = this.selectedCategoryOfImprovement;
-      let goalPercentage = this.goalPercentage
-      //Calculates the amount the score of a category can increase
-
-      function calculateNeededCategoryScoreIncrease() {
-        let side1Percentage = parseInt(goalPercentage, 10);
-        let side1 = side1Percentage / 100;
-        let multiplierWeight;
-        weights.asyncForEach((weight) => {
-          if (weight.category == selectedCategoryOfImprovement) {
-            multiplierWeight = weight.weight;
-          }
-          else if (weight.category !== selectedCategoryOfImprovement) {
-            weightsArr.push(weight.score);
-          }
-        }).then(() => {
-          let sum = 0;
-          weightsArr.asyncForEach((weight) => {
-            sum += weight;
-          }).then(() => {
-            side1 -= sum;
-            vm.percentageToRaise = (side1 / multiplierWeight) * 100;
-            multiplierWeight = 0;
-            sum = 0;
-          });
-        });
-      }
-
-      function calculateAssignmentsNeeded() {
-        let categorySpecificScores = [];
-        let numScores = 0;
-        let numeratorSum = 0;
-        let denominatorSum = 0;
-        let numeratorAvg;
-        let denominatorAvg;
-        let percentageAvg;
-        scores.asyncForEach((score) => {
-          if (score.category == selectedCategoryOfImprovement) {
-            categorySpecificScores.push({
-              fnum: score.fnum,
-              snum: score.snum
-            })
-          }
-        }).then(() => {
-          categorySpecificScores.asyncForEach((score) => {
-            // Do average code here
-            numScores += 1;
-            numeratorSum += score.fnum;
-            denominatorSum += score.snum;
-            numeratorAvg = numeratorSum / numScores;
-            denominatorAvg = denominatorSum / numScores;
-
-            // console.log(numeratorAvg, denominatorAvg);
-          }).then(() => {
-            let categoryPercentage;
-            let step1;
-            let step2;
-
-            let extraPercentage;
-            let numAssignments = 1;
-            function calculateAssignment() {
-              if (numAssignments === 1) {
-                categoryPercentage = (numeratorSum / denominatorSum) * 100;
-                step1 = vm.percentageToRaise * (numScores + 1);
-                step2 = Math.ceil(step1 - categoryPercentage);
-              }
-              else if (numAssignments > 1) {
-                categoryPercentage = (categoryPercentage + 100) / 2;
-                step1 = vm.percentageToRaise * (numScores + 1);
-                step2 = Math.ceil(step1 - categoryPercentage);
-              }
-              if (step2 > 100) {
-                extraPercentage = step2 - 100;
-                numAssignments += 1;
-                calculateAssignment();
-              }
-              else {
-                vm.numAssignmentsToComplete = numAssignments - 1;
-                vm.finalAssignmentPercentage = step2;
-                return;
-              }
+        function calculateNeededCategoryScoreIncrease() {
+          let side1Percentage = parseInt(goalPercentage, 10);
+          let side1 = side1Percentage / 100;
+          let multiplierWeight;
+          weights.asyncForEach((weight) => {
+            if (weight.category == selectedCategoryOfImprovement) {
+              multiplierWeight = weight.weight;
             }
-            calculateAssignment();
-          })
-        });
-      }
+            else if (weight.category !== selectedCategoryOfImprovement) {
+              weightsArr.push(weight.score);
+            }
+          }).then(() => {
+            let sum = 0;
+            weightsArr.asyncForEach((weight) => {
+              sum += weight;
+            }).then(() => {
+              side1 -= sum;
+              vm.percentageToRaise = (side1 / multiplierWeight) * 100;
+              multiplierWeight = 0;
+              sum = 0;
+            });
+          });
+        }
 
-      calculateNeededCategoryScoreIncrease();
-      calculateAssignmentsNeeded();
+        function calculateAssignmentsNeeded() {
+          let categorySpecificScores = [];
+          let numScores = 0;
+          let numeratorSum = 0;
+          let denominatorSum = 0;
+          let numeratorAvg;
+          let denominatorAvg;
+          let percentageAvg;
+          scores.asyncForEach((score) => {
+            if (score.category == selectedCategoryOfImprovement) {
+              categorySpecificScores.push({
+                fnum: score.fnum,
+                snum: score.snum
+              })
+            }
+          }).then(() => {
+            categorySpecificScores.asyncForEach((score) => {
+              // Do average code here
+              numScores += 1;
+              numeratorSum += score.fnum;
+              denominatorSum += score.snum;
+              numeratorAvg = numeratorSum / numScores;
+              denominatorAvg = denominatorSum / numScores;
+
+              // console.log(numeratorAvg, denominatorAvg);
+            }).then(() => {
+              let categoryPercentage;
+              let step1;
+              let step2;
+
+              let extraPercentage;
+              let numAssignments = 1;
+              function calculateAssignment() {
+                if (numAssignments === 1) {
+                  categoryPercentage = (numeratorSum / denominatorSum) * 100;
+                  step1 = vm.percentageToRaise * (numScores + 1);
+                  step2 = Math.ceil(step1 - categoryPercentage);
+                }
+                else if (numAssignments > 1) {
+                  categoryPercentage = (categoryPercentage + 100) / 2;
+                  step1 = vm.percentageToRaise * (numScores + 1);
+                  step2 = Math.ceil(step1 - categoryPercentage);
+                }
+                if (step2 > 100) {
+                  extraPercentage = step2 - 100;
+                  numAssignments += 1;
+                  calculateAssignment();
+                }
+                else {
+                  vm.numAssignmentsToComplete = numAssignments - 1;
+                  vm.finalAssignmentPercentage = step2;
+                  return;
+                }
+              }
+              calculateAssignment();
+            })
+          });
+        }
+
+        calculateNeededCategoryScoreIncrease();
+        calculateAssignmentsNeeded();
+        this.howButtonSectionVisible = true;
+        return;
+      }
+      else if(this.goalPercentage === '') {
+        this.errorType = this.errorTypes.goalCalculationError;
+        this.errorText = "Please enter a goal percentage.";
+        this.errorShown = true;
+        return;
+      }
+      else if(isNaN(this.goalPercentage) === true) {
+        this.errorType = this.errorTypes.goalCalculationError;
+        this.errorText = "Goal percentage should be a number.";
+        this.errorShown = true;
+        return;
+      }
+      else {
+        this.errorType = this.errorTypes.goalCalculationError;
+        this.errorText = "Please select a category to improve upon.";
+        this.errorShown = true;
+        return;
+      }
     },
     showHowSection: function () {
       this.howSectionVisible = true;
+    },
+    hideError: function() {
+      this.errorShown = false;
     }
   }
 })

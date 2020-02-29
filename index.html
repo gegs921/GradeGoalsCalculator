@@ -28,6 +28,17 @@
         <div class="field">
           <button class="button" v-on:click="calculateMethods">Get Methods</button>
         </div>
+        <div class="field" v-if="errorShown === true && errorType === 3">
+          <article class="message is-danger">
+            <div class="message-header">
+              <p>Error</p>
+              <button class="delete" aria-label="delete" v-on:click="hideError"></button>
+            </div>
+            <div class="message-body">
+              {{ errorText }}
+            </div>
+          </article>
+        </div>
         <div class="field">
           {{ recommendedCategoryOfImprovement }}
         </div>
@@ -61,6 +72,17 @@
             <div class="field">
               <button v-on:click="addWeight" class="button is-primary">Add Category</button>
             </div>
+            <div class="field" v-if="errorShown === true && errorType === 2">
+              <article class="message is-danger">
+                <div class="message-header">
+                  <p>Error</p>
+                  <button class="delete" aria-label="delete" v-on:click="hideError"></button>
+                </div>
+                <div class="message-body">
+                  {{ errorText }}
+                </div>
+              </article>
+            </div>            
             <div class="field">
               <ul>
                 <weights-comp v-for="weight in weights" :weight="weight">
@@ -94,6 +116,17 @@
             <div class="field">
               <button v-on:click="addScore" class="button is-primary">Add Assignment</button>
               <button v-on:click="calculateGrade" class="button is-success">Calculate</button>
+            </div>
+            <div class="field" v-if="errorShown === true && errorType === 1">
+              <article class="message is-danger">
+                <div class="message-header">
+                  <p>Error</p>
+                  <button class="delete" aria-label="delete" v-on:click="hideError"></button>
+                </div>
+                <div class="message-body">
+                  {{ errorText }}
+                </div>
+              </article>
             </div>
             <div class="field">
               <ul>
