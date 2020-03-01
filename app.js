@@ -58,7 +58,12 @@ app.get('/', (req, res) => {
 });
 
 app.get('/register', (req, res) => {
-  res.sendFile(path.join(__dirname + '/public/register.html'));
+  if(req.session.email) {
+    res.send('You are already logged into your account.');
+  }
+  else {
+    res.sendFile(path.join(__dirname + '/public/register.html'));
+  }
 });
 
 app.get('/login', (req, res) => {
