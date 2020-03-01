@@ -126,6 +126,7 @@ let app = new Vue({
       categoryAdditionError: 2,
       goalCalculationError: 3,
     },
+    user: {},
     idNum: 0,
   },
   methods: {
@@ -394,6 +395,17 @@ let app = new Vue({
     },
     hideError: function() {
       this.errorShown = false;
+    },
+    getUser: function() {
+      axios.get('http://localhost:3000/user').then((response) => {
+        this.user = response;
+        console.log(this.user);
+      }).catch((error) => {
+        console.log(error.response);
+      })
     }
+  },
+  beforeMount() {
+    this.getUser();
   }
 })

@@ -21,6 +21,27 @@ let db = mongoose.connect(`mongodb://${dbuname}:${dbpassword}@ds137827.mlab.com:
   useUnifiedTopology: true
 });
 
+const UserSchema = new mongoose.Schema({
+  email: {
+    type: String,
+    unique: true,
+    required: true,
+    trim: true
+  },
+  username: {
+    type: String,
+    unique: true,
+    required: true,
+    trim: true
+  },
+  password: {
+    type: String,
+    required: true
+  }
+});
+
+const User = mongoose.model('User', UserSchema);
+
 app.use(express.urlencoded({ extended: true }));
 app.use(express.json());
 app.use('/public', express.static(path.join(__dirname, 'public')));
@@ -44,26 +65,21 @@ app.get('/login', (req, res) => {
   res.sendFile(path.join(__dirname + '/public/login.html'));
 });
 
-const UserSchema = new mongoose.Schema({
-  email: {
-    type: String,
-    unique: true,
-    required: true,
-    trim: true
-  },
-  username: {
-    type: String,
-    unique: true,
-    required: true,
-    trim: true
-  },
-  password: {
-    type: String,
-    required: true
-  }
-});
+app.get('/user', (req, res) => {
+  User.findOne({ email: sess.email }, function(err, user) {
 
-const User = mongoose.model('User', UserSchema);
+    if(user) {
+      res.json({
+        id: user.id,
+        username: user.username,
+        email: user.email
+      });
+    }
+    else {
+      res.json({});
+    }
+  })
+});
 
 app.post('/registrationComplete', (req, res) => { 
   let userData = {
@@ -114,7 +130,7 @@ app.post('/loginComplete', (req, res) => {
     }
     bcrypt.compare(req.body.password, user.password, function(err, result) {
       if(result === true) {
-        console.log('ran');
+        console.log(req.session);
         sess = req.session;
         sess.email = req.body.email;
         res.redirect('/');

@@ -17,6 +17,7 @@ let app = new Vue({
         passwordConf: this.passwordConf
       }).then((res) => {
         console.log(res);
+        window.location.href = "/";
       }).catch((err) => {
         console.log(err);
       });

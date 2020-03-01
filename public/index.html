@@ -12,6 +12,12 @@
       <div class="notification">
         <h1 class="is-size-1 has-text-centered">Class Grade: <p class="has-text-success" id="classGrade">{{ classGrade }}%</p></h1>
         <div class="field">
+          User Email: {{ user.data.email }}
+        </div>
+        <div class="field">
+          Username: {{ user.data.username }}
+        </div>
+        <div class="field">
           <p class="is-size-4">Goal: {{ goalPercentage }}%</p>
           <input v-model="goalPercentage" class="input">
         </div>
@@ -136,6 +142,7 @@
         </div>
       </div>
     </div>
+    <script src="https://unpkg.com/axios/dist/axios.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/vue/dist/vue.js"></script>
     <script src="public/js/script.js"></script>
   </body>
