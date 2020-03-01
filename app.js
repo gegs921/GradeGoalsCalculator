@@ -148,7 +148,7 @@ app.post('/loginComplete', (req, res) => {
   });
 });
 
-app.post('/logout', function(req, res, next) {
+app.get('/logout', function(req, res, next) {
   req.session.destroy((err) => {
     if(err) {
       return console.log(err);

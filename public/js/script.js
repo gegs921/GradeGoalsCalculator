@@ -403,6 +403,9 @@ let app = new Vue({
       }).catch((error) => {
         console.log(error.response);
       })
+    },
+    logOut: function() {
+      window.location.href = "/logout";
     }
   },
   beforeMount() {

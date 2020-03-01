@@ -18,6 +18,9 @@
           Username: {{ user.data.username }}
         </div>
         <div class="field">
+          <button class="button" v-on:click="logOut">Logout</button>
+        </div>
+        <div class="field">
           <p class="is-size-4">Goal: {{ goalPercentage }}%</p>
           <input v-model="goalPercentage" class="input">
         </div>
