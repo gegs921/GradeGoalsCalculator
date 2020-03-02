@@ -127,6 +127,8 @@ let app = new Vue({
       goalCalculationError: 3,
     },
     user: {},
+    loginButtonText: "Log in",
+    loginButtonHREF: "/login",
     idNum: 0,
   },
   methods: {
@@ -406,9 +408,30 @@ let app = new Vue({
     },
     logOut: function() {
       window.location.href = "/logout";
+    },
+    changeLoginButton: function() {
+      axios.get('http://localhost:3000/user').then((response) => {
+        console.log(response);
+        if (!response.data.email) {
+          this.loginButtonText = "Log in";
+        }
+        else {
+          this.loginButtonText = "Log out";
+          this.loginButtonHREF = "/logout";
+        }
+      })
+    },
+    goToLoginPageOrLogoutPage: function() {
+      if(this.loginButtonText === "Log in") {
+        window.location.href = "/login";
+      }
+      if(this.loginButtonText === "Log out") {
+        window.location.href = "/logout";
+      }
     }
   },
   beforeMount() {
     this.getUser();
+    this.changeLoginButton();
   }
 })

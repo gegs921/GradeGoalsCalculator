@@ -9,17 +9,43 @@
   </head>
   <body>
     <div id="app">
+      <nav class="navbar" role="navigation" aria-label="main navigation">
+        <div class="navbar-brand">
+          <a class="navbar-item" href="https://bulma.io">
+            logo
+          </a>
+          <a role="button" class="navbar-burger burger" aria-label="menu" aria-expanded="false" data-target="navbarBasicExample" onclick="document.querySelector('.navbar-menu').classList.toggle('is-active');">
+            <span aria-hidden="true"></span>
+            <span aria-hidden="true"></span>
+            <span aria-hidden="true"></span>
+          </a>
+        </div>
+      
+        <div id="navbarBasicExample" class="navbar-menu">
+          <div class="navbar-start">
+            <a class="navbar-item" href="/">
+              Home
+            </a>
+          </div>
+          <div class="navbar-end">
+            <a class="navbar-item">
+              {{ user.data.username }}
+            </a>
+            <div class="navbar-item">
+              <div class="buttons">
+                <a class="button is-primary" href="/register">
+                  <strong>Sign up</strong>
+                </a>
+                <button class="button is-light" v-on:click="goToLoginPageOrLogoutPage">
+                  {{ loginButtonText }}
+                </button>
+              </div>
+            </div>
+          </div>
+        </div>
+      </nav>
       <div class="notification">
         <h1 class="is-size-1 has-text-centered">Class Grade: <p class="has-text-success" id="classGrade">{{ classGrade }}%</p></h1>
-        <div class="field">
-          User Email: {{ user.data.email }}
-        </div>
-        <div class="field">
-          Username: {{ user.data.username }}
-        </div>
-        <div class="field">
-          <button class="button" v-on:click="logOut">Logout</button>
-        </div>
         <div class="field">
           <p class="is-size-4">Goal: {{ goalPercentage }}%</p>
           <input v-model="goalPercentage" class="input">
