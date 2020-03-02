@@ -6,7 +6,6 @@ const bodyParser = require('body-parser');
 const mongoose = require('mongoose');
 const bcrypt = require('bcrypt');
 const session = require('express-session');
-// const MongoStore = require('connect-mongo')(session);
 const saltRounds = 10;
 const dbuname = process.env.DB_UNAME;
 const dbpassword = process.env.DB_PASSWORD;
@@ -111,23 +110,6 @@ app.post('/registrationComplete', (req, res) => {
 });
 
 app.post('/loginComplete', (req, res) => {
-  // User.findOne({ email: req.body.email })
-  //   .exec(function(err, user) {
-  //     if(err || !user) {
-  //       const err = new Error('User not found.');
-  //       err.status = 401;
-  //       return callback(err);
-  //     }
-  //     bcrypt.compare(req.body.password, user.password, function(err, result) {
-  //       if(result === true) {
-  //         req.session.userId = user._id;
-  //         res.redirect('/');
-  //       }
-  //       else {
-  //         return callback();
-  //       }
-  //     });
-  //   })
   User.findOne({ email: req.body.email }, function(err, user) {
     if(err || !user) {
       console.log(err);

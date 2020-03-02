@@ -223,7 +223,6 @@ let app = new Vue({
       }
     },
     changeAssignmentCategory: function (event) {
-      // console.log('ran');
       this.category = event.target.options[event.target.options.selectedIndex].text;
     },
     changeAssignmentCategoryOfImprovement: function (event) {
@@ -401,7 +400,6 @@ let app = new Vue({
     getUser: function() {
       axios.get('http://localhost:3000/user').then((response) => {
         this.user = response;
-        console.log(this.user);
       }).catch((error) => {
         console.log(error.response);
       })
