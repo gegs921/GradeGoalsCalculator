@@ -85,6 +85,15 @@ app.get('/user', (req, res) => {
   })
 });
 
+app.get('/logout', function(req, res, next) {
+  req.session.destroy((err) => {
+    if(err) {
+      return console.log(err);
+    }
+    res.redirect('/');
+  });
+});
+
 app.post('/registrationComplete', (req, res) => { 
   let userData = {
     email : req.body.email,
@@ -126,18 +135,23 @@ app.post('/loginComplete', (req, res) => {
         console.log('incorrect password');
         return;
       }
-    })
+    });
   });
 });
 
-app.get('/logout', function(req, res, next) {
-  req.session.destroy((err) => {
+app.post('/usernameandemailcheck', (req, res) => {
+  User.find({ username: req.body.username, email: req.body.email }, function(err, user) {
     if(err) {
-      return console.log(err);
+      console.log(err);
     }
-    res.redirect('/');
-  })
-})
+    else if(!user) {
+      res.send(true);
+    }
+    else {
+      res.send(false);
+    }
+  });
+});
 
 app.listen(port, () => {
   console.log(`App is running at http://localhost:${port}`);

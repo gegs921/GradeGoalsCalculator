@@ -1,6 +1,6 @@
 function validateEmail(email) {
   if(typeof(email) !== 'string') {
-    return console.log('email should be a string');
+    console.log('email should be a string');
     return false;
   }
   stringArr = email.split('@');
