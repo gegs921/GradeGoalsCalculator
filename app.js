@@ -10,8 +10,6 @@ const saltRounds = 10;
 const dbuname = process.env.DB_UNAME;
 const dbpassword = process.env.DB_PASSWORD;
 
-let sess;
-
 const app = express();
 const port = process.env.PORT;
 
@@ -52,7 +50,6 @@ app.use(session({
 
 
 app.get('/', (req, res) => {
-  sess = req.session;
   res.sendFile(path.join(__dirname + '/public/index.html'));
 });
 
@@ -70,7 +67,7 @@ app.get('/login', (req, res) => {
 });
 
 app.get('/user', (req, res) => {
-  User.findOne({ email: sess.email }, function(err, user) {
+  User.findOne({ email: req.session.email }, function(err, user) {
 
     if(user) {
       res.json({
@@ -109,8 +106,7 @@ app.post('/registrationComplete', (req, res) => {
       userModelInstance.save((err, user) => {
         if(err) return console.error(err);
         else { 
-          sess = req.session;
-          sess.email = req.body.email;
+          req.session.email = req.body.email;
           res.redirect('/');
         }
       });
@@ -127,8 +123,7 @@ app.post('/loginComplete', (req, res) => {
     bcrypt.compare(req.body.password, user.password, function(err, result) {
       if(result === true) {
         console.log(req.session);
-        sess = req.session;
-        sess.email = req.body.email;
+        req.session.email = req.body.email;
         res.redirect('/');
       }
       else {
