@@ -6,7 +6,7 @@ const bodyParser = require('body-parser');
 const mongoose = require('mongoose');
 const bcrypt = require('bcrypt');
 const session = require('express-session');
-const cookieParser = require('cookie-parser')
+const cookieParser = require('cookie-parser');
 const saltRounds = 10;
 const dbuname = process.env.DB_UNAME;
 const dbpassword = process.env.DB_PASSWORD;
@@ -43,6 +43,7 @@ const User = mongoose.model('User', UserSchema);
 app.use(express.urlencoded({ extended: true }));
 app.use(express.json());
 app.use('/public', express.static(path.join(__dirname, 'public')));
+app.use(cookieParser());
 app.use(session({
   secret: process.env.SESSION_SECRET,
   resave: true,
