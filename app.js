@@ -6,6 +6,7 @@ const bodyParser = require('body-parser');
 const mongoose = require('mongoose');
 const bcrypt = require('bcrypt');
 const session = require('express-session');
+const cookieParser = require('cookie-parser')
 const saltRounds = 10;
 const dbuname = process.env.DB_UNAME;
 const dbpassword = process.env.DB_PASSWORD;
