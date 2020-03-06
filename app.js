@@ -118,32 +118,21 @@ app.post('/registrationComplete', (req, res) => {
 
 app.post('/loginComplete', (req, res) => {
   User.findOne({ email: req.body.email }, function(err, user) {
-    if(err) {
-      res.send(false);
+    if(err || !user) {
       console.log(err);
       return;
     }
-    else if(!user) {
-      res.send(false);
-      return;
-    }
-    else {
-      bcrypt.compare(req.body.password, user.password, function(err, result) {
-        if(err) {
-          console.log(err);
-        }
-        else if(result === true) {
-          console.log(req.session);
-          req.session.email = req.body.email;
-          return;
-        }
-        else {
-          res.send(false);
-          console.log('incorrect password');
-          return;
-        }
-      });
-    }
+    bcrypt.compare(req.body.password, user.password, function(err, result) {
+      if(result === true) {
+        console.log(req.session);
+        req.session.email = req.body.email;
+        res.redirect('/');
+      }
+      else {
+        console.log('incorrect password');
+        return;
+      }
+    });
   });
 });
 
