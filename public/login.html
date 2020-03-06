@@ -20,6 +20,17 @@
         <label>Password</label>
         <input type="password" class="input" v-model="password">
       </div>
+      <div class="field" v-if="errorShown === true && errorType === 1">
+        <article class="message is-danger">
+          <div class="message-header">
+            <p>Error</p>
+            <button class="delete" aria-label="delete" v-on:click="hideError"></button>
+          </div>
+          <div class="message-body">
+            {{ errorText }}
+          </div>
+        </article>
+      </div>
       <div class="field">
         <button class="button" v-on:click="post">Login</button>
       </div>
