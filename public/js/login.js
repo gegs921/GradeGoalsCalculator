@@ -6,24 +6,22 @@ let app = new Vue({
   },
   methods: {
     post: function() {
-      if(validateEmail(this.email) === false) {
-        return;
-      }
-      else if(validatePassword(this.password) === false){
-        return;
-      }
-      else {
-        axios.post('/loginComplete', {
-          email: this.email,
-          password: this.password
-        }).then((res) => {
-          console.log(res);
+      axios.post('/loginComplete', {
+        email: this.email,
+        password: this.password
+      }).then((res) => {
+        if(res.data === false) {
+          console.log("incorrect password or email!");
+          return;
+        }
+        else {
+          console.log("data:" + " " + JSON.stringify(res.data));
           window.location.href = "/";
+        }
 
-        }).catch((err) => {
-          console.log(err);
-        });
-      }
+      }).catch((err) => {
+        console.log(err);
+      });
     }
   }
 })
