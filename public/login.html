@@ -16,22 +16,11 @@
         <label>Email</label>
         <input type="email" class="input" v-model="email">
       </div>
-      <div class="field" v-if="errorShown === true && errorType === 1">
-        <article class="message is-danger">
-          <div class="message-header">
-            <p>Error</p>
-            <button class="delete" aria-label="delete" v-on:click="hideError"></button>
-          </div>
-          <div class="message-body">
-            {{ errorText }}
-          </div>
-        </article>
-      </div>
       <div class="field">
         <label>Password</label>
         <input type="password" class="input" v-model="password">
       </div>
-      <div class="field" v-if="errorShown === true && errorType === 2">
+      <div class="field" v-if="errorShown === true && errorType === 1">
         <article class="message is-danger">
           <div class="message-header">
             <p>Error</p>

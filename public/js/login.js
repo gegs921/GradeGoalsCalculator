@@ -7,36 +7,29 @@ let app = new Vue({
     errorType: '',
     errorShown: false,
     errorTypes: {
-      emailError: 1,
-      passwordError: 2
+      loginError: 1
     },
   },
   methods: {
     post: function() {
-      if(validateEmail(this.email) === false) {
-        this.errorType = this.errorTypes.emailError;
-        this.errorText = "Email is not valid!";
-        this.errorShown = true;
-        return;
-      }
-      else if(validatePassword(this.password) === false){
-        this.errorType = this.errorTypes.passwordError;
-        this.errorText = "Password is not valid";
-        this.errorShown = true;
-        return;
-      }
-      else {
-        axios.post('/loginComplete', {
-          email: this.email,
-          password: this.password
-        }).then((res) => {
-          console.log(res);
-          window.location.href = "/";
+      axios.post('/loginComplete', {
+        email: this.email,
+        password: this.password
+      }).then((response) => {
+        console.log('ran');
+        // if(response.data = false) {
+        //   console.log('ran');
+        //   this.errorType = this.errorTypes.loginError;
+        //   this.errorText = "Incorrect email or password";
+        //   this.errorShown = true;
+        //   return;
+        // }
+        console.log("data:" + " " + response.data);
+        window.location.href = "/";
 
-        }).catch((err) => {
-          console.log(err);
-        });
-      }
+      }).catch((err) => {
+        console.log(err);
+      });
     }
   }
 })
