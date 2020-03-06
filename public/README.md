@@ -2,7 +2,22 @@
 
 #### Calculator that calculates what you need to do to get that next grade.**
 
-Calculate a Grade for Each Scoring Category
+**Installation**
+
+Clone repo:
+
+`$ git clone https://github.com/talonbragg/GradeGoalsCalculator`
+
+Go to directory:
+
+`$ cd GradeGoalsCalculator`
+
+Start app:
+
+`$ nodemon app.js`
+
+**Calculate a Grade for Each Scoring Category**
+
 Divide points earned by points possible to calculate your grade in each scoring category. So if you've earned 280 points out of 300 points possible on tests, you'd have:
 
 `280 ÷ 300 = 0.933` for tests
