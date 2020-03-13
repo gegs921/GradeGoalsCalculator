@@ -37,6 +37,18 @@ const UserSchema = new mongoose.Schema({
   }
 });
 
+const ClassSchema = new mongoose.Schema({
+  name: {
+    type: String,
+    required: true
+  },
+  assignments: {
+    type: Object,
+    required: true
+  }
+});
+
+const Class = mongoose.model('Class', ClassSchema);
 const User = mongoose.model('User', UserSchema);
 
 app.use(express.urlencoded({ extended: true }));
