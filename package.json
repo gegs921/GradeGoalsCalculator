@@ -4,7 +4,7 @@
   "description": "Calculate assignments you can complete to reach a goal grade",
   "main": "app.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "run": "nodemon app.js"
   },
   "repository": {
     "type": "git",
