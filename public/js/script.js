@@ -436,19 +436,25 @@ let app = new Vue({
         return;
       }
       else {
-        axios.post('/saveClass', {
-          userId: user.id,
-          scores: scores,
-          weights: weights
-        }).then((res) => {
-          window.location.href="/";
-        }).catch((err) => {
-          console.log(err);
+        axios.get('/user').then((response) => {
+          console.log("response:" + response.data.id);
+          axios.post('/saveClass', {
+            userId: response.data.id,
+            scores: scores,
+            weights: weights
+          }).then((res) => {
+            window.location.href="/";
+          }).catch((err) => {
+            console.log(err);
+          })
+        })
+        .catch((err) => {
+
         })
       }
     }
   },
-  beforeMount() {
+  mounted() {
     this.getUser();
     this.changeLoginButton();
   }

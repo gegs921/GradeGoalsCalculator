@@ -38,6 +38,10 @@ const UserSchema = new mongoose.Schema({
 });
 
 const ClassSchema = new mongoose.Schema({
+  connectedUserId: {
+    type: String,
+    required: true
+  },
   scores: {
     type: Array,
     required: true
@@ -79,6 +83,10 @@ app.get('/login', (req, res) => {
   res.sendFile(path.join(__dirname + '/dist/login.html'));
 });
 
+app.get('/dashboard', (rea, res) => {
+  res.sendFile(path.join(__dirname + '/dist/dashboard.html'));
+})
+
 app.get('/user', (req, res) => {
   User.findOne({ email: req.session.email }, function(err, user) {
 
@@ -101,6 +109,23 @@ app.get('/logout', function(req, res, next) {
       return console.log(err);
     }
     res.redirect('/');
+  });
+});
+
+app.get('/classes', (req, res) => {
+  if(!req.session.id) {
+    res.send('User must be logged in to view their saved classes.')
+    return;
+  }
+  Class.find({ userId: req.session.id }, function(err, classes) {
+    if(err) {
+      res.send('User has not saved any classes');
+      return console.log(err);
+    }
+    else {
+      res.send(classes);
+      return;
+    }
   });
 });
 
@@ -169,6 +194,7 @@ app.post('/usernameandemailcheck', (req, res) => {
 
 app.post('/saveClass', (req, res) => {
   let classData = {
+    connectedUserId: req.body.userId,
     scores: req.body.scores,
     weights: req.body.weights
   }

@@ -6,7 +6,8 @@
   "scripts": {
     "test": "ava",
     "start": "node app.js",
-    "build": "parcel build ./public/index.html ./public/login.html ./public/register.html"
+    "build": "parcel build ./public/index.html ./public/login.html ./public/register.html ./public/dashboard.html",
+    "dev": "npm run build && npm run start"
   },
   "repository": {
     "type": "git",
