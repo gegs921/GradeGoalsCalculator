@@ -1,4 +1,4 @@
-function validateEmail(email) {
+module.exports.validateEmail = function(email) {
   if(typeof(email) !== 'string') {
     console.log('email should be a string');
     return false;
@@ -14,7 +14,7 @@ function validateEmail(email) {
   }
 }
 
-function validatePassword(pass) {
+module.exports.vaildatePassword = function(pass) {
   charArr = pass.split('');
   if(charArr.length < 8) {
     console.log('not valid');
