@@ -128,6 +128,7 @@ let app = new Vue({
       saveClassError: 4
     },
     user: {},
+    className: '',
     loginButtonText: "Log in",
     loginButtonHREF: "/login",
     idNum: 0,
@@ -439,6 +440,7 @@ let app = new Vue({
         axios.get('/user').then((response) => {
           console.log("response:" + response.data.id);
           axios.post('/saveClass', {
+            className: this.className,
             userId: response.data.id,
             scores: scores,
             weights: weights

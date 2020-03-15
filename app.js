@@ -38,6 +38,10 @@ const UserSchema = new mongoose.Schema({
 });
 
 const ClassSchema = new mongoose.Schema({
+  className: {
+    type: String,
+    required: true
+  },
   connectedUserId: {
     type: String,
     required: true
@@ -113,11 +117,12 @@ app.get('/logout', function(req, res, next) {
 });
 
 app.get('/classes', (req, res) => {
-  if(!req.session.id) {
+  console.log(req.session.userId);
+  if(!req.session.userId) {
     res.send('User must be logged in to view their saved classes.')
     return;
   }
-  Class.find({ userId: req.session.id }, function(err, classes) {
+  Class.find({ connectedUserId: req.session.userId }, function(err, classes) {
     if(err) {
       res.send('User has not saved any classes');
       return console.log(err);
@@ -145,7 +150,7 @@ app.post('/registrationComplete', (req, res) => {
         if(err) return console.error(err);
         else { 
           req.session.email = req.body.email;
-          req.session.id = user.id;
+          req.session.userId = user.id;
           res.redirect('/');
         }
       });
@@ -167,7 +172,7 @@ app.post('/loginComplete', (req, res) => {
       if(result === true) {
         console.log(req.session);
         req.session.email = req.body.email;
-        req.session.id = user.id;
+        req.session.userId = user.id;
         res.send(true);
       }
       else {
@@ -194,6 +199,7 @@ app.post('/usernameandemailcheck', (req, res) => {
 
 app.post('/saveClass', (req, res) => {
   let classData = {
+    className: req.body.className,
     connectedUserId: req.body.userId,
     scores: req.body.scores,
     weights: req.body.weights

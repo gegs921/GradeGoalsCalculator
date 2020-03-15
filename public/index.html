@@ -83,6 +83,9 @@
           <button class="button is-success" v-on:click="showHowSection">How?</button>
         </div>
         <div class="field" v-if="howButtonSectionVisible === true">
+          <input v-model="className" class="input">
+        </div>
+        <div class="field" v-if="howButtonSectionVisible === true">
           <button class="button" v-on:click="saveClassToUser()">Save Class</button>
         </div>
         <div class="field" v-if="errorShown === true && errorType === 4">

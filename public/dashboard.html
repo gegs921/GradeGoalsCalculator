@@ -10,14 +10,16 @@
 </head>
 <body>
   <div id="app" v-cloak>
-    <div class="field">
+    <!-- <div class="field">
       <ul>
-        <scores-comp v-for="score in scores" :score="score">
+        <classes-comp v-for="actualClass in classes" :actualClass="actualClass">
       </ul>
-    </div>
+    </div> -->
     <div class="field">
       <ul>
-        <weights-comp v-for="weight in weights" :weight="weight">
+        <li v-for="actualClass in classes" :key="actualClass.className">
+          {{ actualClass.className }}
+        </li>
       </ul>
     </div>
   </div>
