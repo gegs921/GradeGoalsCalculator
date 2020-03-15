@@ -15,4 +15,4 @@ Go to directory:
 
 Start app:
 
-`$ nodemon app.js`
+`$ npm run start`
