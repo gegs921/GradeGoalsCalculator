@@ -4,7 +4,8 @@
   "description": "Calculate assignments you can complete to reach a goal grade",
   "main": "app.js",
   "scripts": {
-    "run": "nodemon app.js"
+    "start": "node app.js",
+    "build": "parcel build ./public/index.html ./public/login.html ./public/register.html"
   },
   "repository": {
     "type": "git",
@@ -27,6 +28,7 @@
   },
   "devDependencies": {
     "ava": "^3.5.0",
+    "cssnano": "^4.1.10",
     "nodemon": "^2.0.2"
   }
 }

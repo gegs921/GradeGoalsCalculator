@@ -53,7 +53,7 @@ const User = mongoose.model('User', UserSchema);
 
 app.use(express.urlencoded({ extended: true }));
 app.use(express.json());
-app.use('/public', express.static(path.join(__dirname, 'public')));
+app.use('/', express.static(path.join(__dirname, 'dist')));
 app.use(cookieParser());
 app.use(session({
   secret: process.env.SESSION_SECRET,
@@ -63,7 +63,7 @@ app.use(session({
 
 
 app.get('/', (req, res) => {
-  res.sendFile(path.join(__dirname + '/public/index.html'));
+  res.sendFile(path.join(__dirname + '/index.html'));
 });
 
 app.get('/register', (req, res) => {
@@ -71,12 +71,12 @@ app.get('/register', (req, res) => {
     res.send('You are already logged into your account.');
   }
   else {
-    res.sendFile(path.join(__dirname + '/public/register.html'));
+    res.sendFile(path.join(__dirname + '/dist/register.html'));
   }
 });
 
 app.get('/login', (req, res) => {
-  res.sendFile(path.join(__dirname + '/public/login.html'));
+  res.sendFile(path.join(__dirname + '/dist/login.html'));
 });
 
 app.get('/user', (req, res) => {
