@@ -125,6 +125,7 @@ let app = new Vue({
       assignmentAdditionError: 1,
       categoryAdditionError: 2,
       goalCalculationError: 3,
+      saveClassError: 4
     },
     user: {},
     loginButtonText: "Log in",
@@ -425,6 +426,25 @@ let app = new Vue({
       }
       if(this.loginButtonText === "Log out") {
         window.location.href = "/logout";
+      }
+    },
+    saveClassToUser: function() {
+      if(!this.user || this.user === {}) {
+        this.errorType = this.errorTypes.saveClassError;
+        this.errorText = "You must be logged in to save a class!";
+        this.errorShown = true;
+        return;
+      }
+      else {
+        axios.post('/saveClass', {
+          userId: user.id,
+          scores: scores,
+          weights: weights
+        }).then((res) => {
+          window.location.href="/";
+        }).catch((err) => {
+          console.log(err);
+        })
       }
     }
   },

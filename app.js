@@ -38,12 +38,12 @@ const UserSchema = new mongoose.Schema({
 });
 
 const ClassSchema = new mongoose.Schema({
-  name: {
-    type: String,
+  scores: {
+    type: Array,
     required: true
   },
-  assignments: {
-    type: Object,
+  weights: {
+    type: Array,
     required: true
   }
 });
@@ -120,6 +120,7 @@ app.post('/registrationComplete', (req, res) => {
         if(err) return console.error(err);
         else { 
           req.session.email = req.body.email;
+          req.session.id = user.id;
           res.redirect('/');
         }
       });
@@ -141,6 +142,7 @@ app.post('/loginComplete', (req, res) => {
       if(result === true) {
         console.log(req.session);
         req.session.email = req.body.email;
+        req.session.id = user.id;
         res.send(true);
       }
       else {
@@ -161,6 +163,23 @@ app.post('/usernameandemailcheck', (req, res) => {
     }
     else {
       res.send(false);
+    }
+  });
+});
+
+app.post('/saveClass', (req, res) => {
+  let classData = {
+    scores: req.body.scores,
+    weights: req.body.weights
+  }
+  let classModelInstance = new Class(classData);
+
+  classModelInstance.save((err, user) => {
+    if(err) {
+      return console.log(err);
+    }
+    else {
+      res.redirect('/');
     }
   });
 });
