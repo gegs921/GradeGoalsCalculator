@@ -38,12 +38,20 @@ const UserSchema = new mongoose.Schema({
 });
 
 const ClassSchema = new mongoose.Schema({
-  name: {
+  className: {
     type: String,
     required: true
   },
-  assignments: {
-    type: Object,
+  connectedUserId: {
+    type: String,
+    required: true
+  },
+  scores: {
+    type: Array,
+    required: true
+  },
+  weights: {
+    type: Array,
     required: true
   }
 });
@@ -79,6 +87,10 @@ app.get('/login', (req, res) => {
   res.sendFile(path.join(__dirname + '/dist/login.html'));
 });
 
+app.get('/dashboard', (rea, res) => {
+  res.sendFile(path.join(__dirname + '/dist/dashboard.html'));
+})
+
 app.get('/user', (req, res) => {
   User.findOne({ email: req.session.email }, function(err, user) {
 
@@ -104,6 +116,24 @@ app.get('/logout', function(req, res, next) {
   });
 });
 
+app.get('/classes', (req, res) => {
+  console.log(req.session.userId);
+  if(!req.session.userId) {
+    res.send('User must be logged in to view their saved classes.')
+    return;
+  }
+  Class.find({ connectedUserId: req.session.userId }, function(err, classes) {
+    if(err) {
+      res.send('User has not saved any classes');
+      return console.log(err);
+    }
+    else {
+      res.send(classes);
+      return;
+    }
+  });
+});
+
 app.post('/registrationComplete', (req, res) => { 
   let userData = {
     email : req.body.email,
@@ -120,6 +150,7 @@ app.post('/registrationComplete', (req, res) => {
         if(err) return console.error(err);
         else { 
           req.session.email = req.body.email;
+          req.session.userId = user.id;
           res.redirect('/');
         }
       });
@@ -141,6 +172,7 @@ app.post('/loginComplete', (req, res) => {
       if(result === true) {
         console.log(req.session);
         req.session.email = req.body.email;
+        req.session.userId = user.id;
         res.send(true);
       }
       else {
@@ -161,6 +193,25 @@ app.post('/usernameandemailcheck', (req, res) => {
     }
     else {
       res.send(false);
+    }
+  });
+});
+
+app.post('/saveClass', (req, res) => {
+  let classData = {
+    className: req.body.className,
+    connectedUserId: req.body.userId,
+    scores: req.body.scores,
+    weights: req.body.weights
+  }
+  let classModelInstance = new Class(classData);
+
+  classModelInstance.save((err, user) => {
+    if(err) {
+      return console.log(err);
+    }
+    else {
+      res.redirect('/');
     }
   });
 });

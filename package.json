@@ -4,8 +4,10 @@
   "description": "Calculate assignments you can complete to reach a goal grade",
   "main": "app.js",
   "scripts": {
+    "test": "ava",
     "start": "node app.js",
-    "build": "parcel build ./public/index.html ./public/login.html ./public/register.html"
+    "build": "parcel build ./public/index.html ./public/login.html ./public/register.html ./public/dashboard.html",
+    "dev": "npm run build && npm run start"
   },
   "repository": {
     "type": "git",
@@ -18,6 +20,7 @@
   },
   "homepage": "https://github.com/talonbragg/GradeGoalsCalculator#readme",
   "dependencies": {
+    "axios": "^0.19.2",
     "bcrypt": "^4.0.0",
     "connect-mongo": "^3.2.0",
     "cookie-parser": "^1.4.4",

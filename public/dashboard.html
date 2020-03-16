@@ -1,0 +1,30 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Document</title>
+  <link href="css/style.css" rel="stylesheet" type="text/css">
+  <link href="css/bulma.min.css" rel="stylesheet" type="text/css">
+  <link href="css/cloak.css" rel="stylesheet" type="text/css">
+</head>
+<body>
+  <div id="app" v-cloak>
+    <!-- <div class="field">
+      <ul>
+        <classes-comp v-for="actualClass in classes" :actualClass="actualClass">
+      </ul>
+    </div> -->
+    <div class="field">
+      <ul>
+        <li v-for="actualClass in classes" :key="actualClass.className">
+          {{ actualClass.className }}
+        </li>
+      </ul>
+    </div>
+  </div>
+  <script src="https://unpkg.com/axios/dist/axios.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/vue/dist/vue.js"></script>
+  <script src="js/dashboard.js"></script>
+</body>
+</html>

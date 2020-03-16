@@ -1,4 +1,6 @@
-function checkUsernameAndEmail(username, email) {
+const axios = require('axios');
+
+module.exports.checkUsernameAndEmail = function(username, email) {
   axios.post('/usernameandemailcheck', {
     username: username,
     email: email
@@ -11,5 +13,6 @@ function checkUsernameAndEmail(username, email) {
     }
   }).catch((error) => {
     console.log(error);
+    return false;
   });
 }

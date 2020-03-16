@@ -125,8 +125,10 @@ let app = new Vue({
       assignmentAdditionError: 1,
       categoryAdditionError: 2,
       goalCalculationError: 3,
+      saveClassError: 4
     },
     user: {},
+    className: '',
     loginButtonText: "Log in",
     loginButtonHREF: "/login",
     idNum: 0,
@@ -426,9 +428,35 @@ let app = new Vue({
       if(this.loginButtonText === "Log out") {
         window.location.href = "/logout";
       }
+    },
+    saveClassToUser: function() {
+      if(!this.user || this.user === {}) {
+        this.errorType = this.errorTypes.saveClassError;
+        this.errorText = "You must be logged in to save a class!";
+        this.errorShown = true;
+        return;
+      }
+      else {
+        axios.get('/user').then((response) => {
+          console.log("response:" + response.data.id);
+          axios.post('/saveClass', {
+            className: this.className,
+            userId: response.data.id,
+            scores: scores,
+            weights: weights
+          }).then((res) => {
+            window.location.href="/";
+          }).catch((err) => {
+            console.log(err);
+          })
+        })
+        .catch((err) => {
+
+        })
+      }
     }
   },
-  beforeMount() {
+  mounted() {
     this.getUser();
     this.changeLoginButton();
   }
