@@ -459,7 +459,10 @@ let app = new Vue({
       }
     },
     switchToAssignments: function() {
-      this.cycle = 1;
+      this.cycle += 1;
+    },
+    cycleBackwards: function() {
+      this.cycle -= 1;
     }
   },
   mounted() {

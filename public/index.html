@@ -65,6 +65,9 @@
           <div class="field">
             <button class="button" v-on:click="calculateMethods">Get Methods</button>
           </div>
+          <div class="field">
+            <button class="button" v-on:click="cycleBackwards">Previous</button>
+          </div>
           <div class="field" v-if="errorShown === true && errorType === 3">
             <article class="message is-danger">
               <div class="message-header">
@@ -125,8 +128,6 @@
             <div class="field">
               <div class="field">
                 <button v-on:click="addWeight" class="button is-primary">Add Category</button>
-              </div>
-              <div class="field">
                 <button v-on:click="switchToAssignments" class="button is-success">Done</button>
               </div>
               <div class="field" v-if="errorShown === true && errorType === 2">
@@ -173,6 +174,7 @@
               <div class="field">
                 <button v-on:click="addScore" class="button is-primary">Add Assignment</button>
                 <button v-on:click="calculateGrade" class="button is-success">Calculate</button>
+                <button class="button" v-on:click="cycleBackwards">Previous</button>
               </div>
               <div class="field" v-if="errorShown === true && errorType === 1">
                 <article class="message is-danger">
