@@ -6,6 +6,7 @@
     <title>Grade Goals Calculator - Home</title>
     <link href="css/style.css" rel="stylesheet" type="text/css">
     <link href="css/bulma.min.css" rel="stylesheet" type="text/css">
+    <link rel="stylesheet" href="https://unpkg.com/bulmaswatch/darkly/bulmaswatch.min.css">
     <link href="css/cloak.css" rel="stylesheet" type="text/css">
   </head>
   <body>
@@ -45,145 +46,152 @@
           </div>
         </div>
       </nav>
-      <div class="notification">
-        <h1 class="is-size-1 has-text-centered">Class Grade: <p class="has-text-success" id="classGrade">{{ classGrade }}%</p></h1>
-        <div class="field">
-          <p class="is-size-4">Goal: {{ goalPercentage }}%</p>
-          <input v-model="goalPercentage" class="input">
-        </div>
-        <div class="field">
-          <label class="label">Assignment Category to Improve Upon</label>
-          <div class="select">
-            <select @change="changeAssignmentCategoryOfImprovement($event)">
-              <option value="" selected disabled>Choose</option>
-              <option v-for="weight in weights">{{ weight.category }}</option>
-            </select>
-          </div>
-        </div>
-        <div class="field">
-          <button class="button" v-on:click="calculateMethods">Get Methods</button>
-        </div>
-        <div class="field" v-if="errorShown === true && errorType === 3">
-          <article class="message is-danger">
-            <div class="message-header">
-              <p>Error</p>
-              <button class="delete" aria-label="delete" v-on:click="hideError"></button>
-            </div>
-            <div class="message-body">
-              {{ errorText }}
-            </div>
-          </article>
-        </div>
-        <div class="field">
-          {{ recommendedCategoryOfImprovement }}
-        </div>
-        <div class="field" v-if="howButtonSectionVisible === true">
-          <p>You need to raise your {{ selectedCategoryOfImprovement }} average to {{ percentageToRaise }}%
-          </p>
-          <button class="button is-success" v-on:click="showHowSection">How?</button>
-        </div>
-        <div class="field" v-if="howButtonSectionVisible === true">
-          <input v-model="className" class="input">
-        </div>
-        <div class="field" v-if="howButtonSectionVisible === true">
-          <button class="button" v-on:click="saveClassToUser()">Save Class</button>
-        </div>
-        <div class="field" v-if="errorShown === true && errorType === 4">
-          <article class="message is-danger">
-            <div class="message-header">
-              <p>Error</p>
-              <button class="delete" aria-label="delete" v-on:click="hideError"></button>
-            </div>
-            <div class="message-body">
-              {{ errorText }}
-            </div>
-          </article>
-        </div>
-        <div class="field" v-if="howSectionVisible === true">
-          <p>You need to get a score of <b>100%</b> on <b>{{ numAssignmentsToComplete }}</b> assignments in the selected category. You also have to get a score of <b>{{ finalAssignmentPercentage }}%</b> on one assignment in the selected category, assuming that the next assignment has the same number of possible points as the assignment before it.</p>
+      <div id="content">
+        <div class="container is-fluid vcentered" v-if="cycle === 2">
+          <h1 class="is-size-1">Class Grade: <p class="has-text-success" id="classGrade">{{ classGrade }}%</p></h1>
           <div class="field">
-            <h5 class="is-size-5">Understand:</h5><p>The more possible points, the better. If the next assignment's score has a denominator of a number greater than the previous assignments denominator, you may get a lower score than advised and still meet your goal.</p>
-            <p></p>
-          </div>
-        </div>
-      </div>
-      <div class="columns">
-        <div class="column">
-          <div class="field">
-            <div class="field">
-              <h3 class="is-size-5">Add Assignment Categories:</h3>
-            </div>
-            <label class="label">Category Weight (%)</label>
-            <input v-model="weight" class="input">
+            <p class="is-size-4">Goal: {{ goalPercentage }}%</p>
+            <input v-model="goalPercentage" class="input">
           </div>
           <div class="field">
-              <label class="label">Category Type</label>
-              <input v-model="type" class="input">
-          </div>
-          <div class="field">
-            <div class="field">
-              <button v-on:click="addWeight" class="button is-primary">Add Category</button>
-            </div>
-            <div class="field" v-if="errorShown === true && errorType === 2">
-              <article class="message is-danger">
-                <div class="message-header">
-                  <p>Error</p>
-                  <button class="delete" aria-label="delete" v-on:click="hideError"></button>
-                </div>
-                <div class="message-body">
-                  {{ errorText }}
-                </div>
-              </article>
-            </div>
-            <div class="field">
-              <ul>
-                <weights-comp v-for="weight in weights" :weight="weight">
-              </ul>
-            </div>
-          </div>
-        </div>
-        <div class="column">
-          <div class="field">
-            <h3 class="is-size-5">Add Assignments:</h3>
-          </div>
-          <div class="field">
-              <label class="label">Assignment Score Numerator</label>
-              <input v-model="fnum" class="input">
-            </div>
-          <div class="field">
-            <label class="label">Assignment Score Denominator</label>
-            <input v-model="snum" class="input">
-          </div>
-          <div class="field">
-            <label class="label">Assignment Category</label>
-            <!-- <input v-model="category" class="input"> -->
+            <label class="label">Assignment Category to Improve Upon</label>
             <div class="select">
-              <select @change="changeAssignmentCategory($event)">
+              <select @change="changeAssignmentCategoryOfImprovement($event)">
                 <option value="" selected disabled>Choose</option>
                 <option v-for="weight in weights">{{ weight.category }}</option>
               </select>
             </div>
           </div>
           <div class="field">
+            <button class="button" v-on:click="calculateMethods">Get Methods</button>
+          </div>
+          <div class="field">
+            <button class="button" v-on:click="cycleBackwards">Previous</button>
+          </div>
+          <div class="field" v-if="errorShown === true && errorType === 3">
+            <article class="message is-danger">
+              <div class="message-header">
+                <p>Error</p>
+                <button class="delete" aria-label="delete" v-on:click="hideError"></button>
+              </div>
+              <div class="message-body">
+                {{ errorText }}
+              </div>
+            </article>
+          </div>
+          <div class="field">
+            {{ recommendedCategoryOfImprovement }}
+          </div>
+          <div class="field" v-if="howButtonSectionVisible === true">
+            <p>You need to raise your {{ selectedCategoryOfImprovement }} average to {{ percentageToRaise }}%
+            </p>
+            <button class="button is-success" v-on:click="showHowSection">How?</button>
+          </div>
+          <div class="field" v-if="howButtonSectionVisible === true">
+            <input v-model="className" class="input">
+          </div>
+          <div class="field" v-if="howButtonSectionVisible === true">
+            <button class="button" v-on:click="saveClassToUser()">Save Class</button>
+          </div>
+          <div class="field" v-if="errorShown === true && errorType === 4">
+            <article class="message is-danger">
+              <div class="message-header">
+                <p>Error</p>
+                <button class="delete" aria-label="delete" v-on:click="hideError"></button>
+              </div>
+              <div class="message-body">
+                {{ errorText }}
+              </div>
+            </article>
+          </div>
+          <div class="field" v-if="howSectionVisible === true">
+            <p>You need to get a score of <b>100%</b> on <b>{{ numAssignmentsToComplete }}</b> assignments in the selected category. You also have to get a score of <b>{{ finalAssignmentPercentage }}%</b> on one assignment in the selected category, assuming that the next assignment has the same number of possible points as the assignment before it.</p>
             <div class="field">
-              <button v-on:click="addScore" class="button is-primary">Add Assignment</button>
-              <button v-on:click="calculateGrade" class="button is-success">Calculate</button>
+              <h5 class="is-size-5">Understand:</h5><p>The more possible points, the better. If the next assignment's score has a denominator of a number greater than the previous assignments denominator, you may get a lower score than advised and still meet your goal.</p>
+              <p></p>
             </div>
-            <div class="field" v-if="errorShown === true && errorType === 1">
-              <article class="message is-danger">
-                <div class="message-header">
-                  <p>Error</p>
-                  <button class="delete" aria-label="delete" v-on:click="hideError"></button>
-                </div>
-                <div class="message-body">
-                  {{ errorText }}
-                </div>
-              </article>
+          </div>
+        </div>
+        <div class="columns">
+          <div class="container is-fluid vcentered" v-if="cycle === 0">
+            <div class="field">
+              <div class="field">
+                <h3 class="is-size-5">Add Assignment Categories:</h3>
+              </div>
+              <label class="label">Category Weight (%)</label>
+              <input v-model="weight" class="input">
             </div>
             <div class="field">
-              <ul>
-                <percent-comp v-for="score in scores" :score="score">
-              </ul>
+                <label class="label">Category Type</label>
+                <input v-model="type" class="input">
+            </div>
+            <div class="field">
+              <div class="field">
+                <button v-on:click="addWeight" class="button is-primary">Add Category</button>
+                <button v-on:click="switchToAssignments" class="button is-success">Done</button>
+              </div>
+              <div class="field" v-if="errorShown === true && errorType === 2">
+                <article class="message is-danger">
+                  <div class="message-header">
+                    <p>Error</p>
+                    <button class="delete" aria-label="delete" v-on:click="hideError"></button>
+                  </div>
+                  <div class="message-body">
+                    {{ errorText }}
+                  </div>
+                </article>
+              </div>
+              <div class="field">
+                <ul>
+                  <weights-comp v-for="weight in weights" :weight="weight">
+                </ul>
+              </div>
+            </div>
+          </div>
+          <div class="container is-fluid vcentered" v-if="cycle === 1">
+            <div class="field">
+              <h3 class="is-size-5">Add Assignments:</h3>
+            </div>
+            <div class="field">
+                <label class="label">Assignment Score Numerator</label>
+                <input v-model="fnum" class="input">
+              </div>
+            <div class="field">
+              <label class="label">Assignment Score Denominator</label>
+              <input v-model="snum" class="input">
+            </div>
+            <div class="field">
+              <label class="label">Assignment Category</label>
+              <!-- <input v-model="category" class="input"> -->
+              <div class="select">
+                <select @change="changeAssignmentCategory($event)">
+                  <option value="" selected disabled>Choose</option>
+                  <option v-for="weight in weights">{{ weight.category }}</option>
+                </select>
+              </div>
+            </div>
+            <div class="field">
+              <div class="field">
+                <button v-on:click="addScore" class="button is-primary">Add Assignment</button>
+                <button v-on:click="calculateGrade" class="button is-success">Calculate</button>
+                <button class="button" v-on:click="cycleBackwards">Previous</button>
+              </div>
+              <div class="field" v-if="errorShown === true && errorType === 1">
+                <article class="message is-danger">
+                  <div class="message-header">
+                    <p>Error</p>
+                    <button class="delete" aria-label="delete" v-on:click="hideError"></button>
+                  </div>
+                  <div class="message-body">
+                    {{ errorText }}
+                  </div>
+                </article>
+              </div>
+              <div class="field">
+                <ul>
+                  <percent-comp v-for="score in scores" :score="score">
+                </ul>
+              </div>
             </div>
           </div>
         </div>

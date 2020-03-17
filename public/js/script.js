@@ -127,6 +127,7 @@ let app = new Vue({
       goalCalculationError: 3,
       saveClassError: 4
     },
+    cycle: 0,
     user: {},
     className: '',
     loginButtonText: "Log in",
@@ -198,6 +199,7 @@ let app = new Vue({
           id: this.idNum
         });
         this.idNum += 1;
+        this.cycle += 1;
       }
       else if(isNaN(this.weight) === true) {
         this.errorType = this.errorTypes.categoryAdditionError;
@@ -270,6 +272,7 @@ let app = new Vue({
                 maxPossibleIncreaseSorted.sort();
                 vm.recommendedCategoryOfImprovement = maxPossibleIncreaseSorted[maxPossibleIncreaseSorted.length - 1];
                 console.log(vm.recommendedCategoryOfImprovement);
+                this.cycle += 1;
               });
             });
           });
@@ -454,6 +457,12 @@ let app = new Vue({
 
         })
       }
+    },
+    switchToAssignments: function() {
+      this.cycle += 1;
+    },
+    cycleBackwards: function() {
+      this.cycle -= 1;
     }
   },
   mounted() {

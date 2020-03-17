@@ -1,0 +1,17 @@
+#content {
+  padding-top: 15%;
+  padding-bottom: 10%;
+}
+
+input.input, .textarea {
+  transition: all 200ms ease;
+  box-shadow: none;
+  border-width: 2px;
+  padding-left: 1em;
+  padding-right: 1em;
+  max-width: 300px;
+}
+
+.container.is-fluid.vcentered {
+  left: 37.5%;
+}
