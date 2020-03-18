@@ -446,7 +446,8 @@ let app = new Vue({
             className: this.className,
             userId: response.data.id,
             scores: scores,
-            weights: weights
+            weights: weights,
+            deleted: false
           }).then((res) => {
             window.location.href="/";
           }).catch((err) => {
@@ -454,7 +455,7 @@ let app = new Vue({
           })
         })
         .catch((err) => {
-
+          console.log(err);
         })
       }
     },

@@ -15,8 +15,15 @@ let app = new Vue({
           return;
         }
         else {
+          console.log("notDeleted:" + JSON.stringify(response.data));
           for(let i = 0; i < response.data.length; i++) {
-            classes.push(response.data[i]);
+            if(response.data[i].deleted === false) {
+              classes.push(response.data[i]);
+            }
+            else {
+              console.log('deleted');
+            }
+
             if(i === response.data.length - 1) {
               this.classes = classes;
               return;
@@ -27,6 +34,16 @@ let app = new Vue({
       .catch((err) => {
         return console.log(err);
       });
+    },
+    deleteClassDB: function(classId) {
+      axios.post('/deleteClass', {
+        id: classId
+      }).then((response) => {
+        console.log(response);
+        window.location.reload();
+      }).catch((err) => {
+        console.log(err);
+      })
     }
   },
   beforeMount() {

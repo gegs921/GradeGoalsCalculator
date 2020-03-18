@@ -53,6 +53,10 @@ const ClassSchema = new mongoose.Schema({
   weights: {
     type: Array,
     required: true
+  },
+  deleted: {
+    type: Boolean,
+    required: true
   }
 });
 
@@ -202,7 +206,8 @@ app.post('/saveClass', (req, res) => {
     className: req.body.className,
     connectedUserId: req.body.userId,
     scores: req.body.scores,
-    weights: req.body.weights
+    weights: req.body.weights,
+    deleted: req.body.deleted
   }
   let classModelInstance = new Class(classData);
 
@@ -215,6 +220,16 @@ app.post('/saveClass', (req, res) => {
     }
   });
 });
+
+app.post('/deleteClass', (req, res) => {
+  Class.updateOne({ _id: req.body.id }, { 
+      deleted: true 
+    }, (err, updated) => {
+      if(err) {
+        console.log(err);
+      }
+    })
+})
 
 app.listen(port, () => {
   console.log(`App is running at http://localhost:${port}`);
