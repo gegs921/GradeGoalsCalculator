@@ -1,0 +1,6 @@
+{
+  "scores":[{"fnum":10,"snum":10,"percentage":100,"category":"hw","id":1},{"fnum":8,"snum":10,"percentage":80,"category":"prj","id":2},{"fnum":7,"snum":10,"percentage":100,"category":"tst","id":3}],
+  "weights":[{"weight":0.1,"category":"hw","pointsPossible":10,"pointsEarned":10,"score":0.1,"maximumPossibleIncrease":0,"id":4},{"weight":0.2,"category":"prj","pointsPossible":10,"pointsEarned":8,"score":0.16000000000000003,"maximumPossibleIncrease":0.03999999999999998,"id":5},{"weight":0.7,"category":"tst","pointsPossible":10,"pointsEarned":7,"score":0.48999999999999994,"maximumPossibleIncrease":0.21000000000000002,"id":6}],
+  "_id":"5e6e91df6086ca075602a250",
+  "connectedUserId":"5e5c1c4245740722ebfc58d1","__v":0
+}

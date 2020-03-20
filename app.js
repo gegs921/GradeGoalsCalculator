@@ -9,6 +9,7 @@ const cookieParser = require('cookie-parser');
 const saltRounds = 10;
 const dbuname = process.env.DB_UNAME;
 const dbpassword = process.env.DB_PASSWORD;
+const handleEditPost = require('./util/editPromise');
 
 const app = express();
 const port = process.env.PORT;
@@ -52,6 +53,10 @@ const ClassSchema = new mongoose.Schema({
   },
   weights: {
     type: Array,
+    required: true
+  },
+  deleted: {
+    type: Boolean,
     required: true
   }
 });
@@ -202,7 +207,8 @@ app.post('/saveClass', (req, res) => {
     className: req.body.className,
     connectedUserId: req.body.userId,
     scores: req.body.scores,
-    weights: req.body.weights
+    weights: req.body.weights,
+    deleted: req.body.deleted
   }
   let classModelInstance = new Class(classData);
 
@@ -215,6 +221,46 @@ app.post('/saveClass', (req, res) => {
     }
   });
 });
+
+app.post('/deleteClass', (req, res) => {
+  Class.updateOne({ _id: req.body.id }, { 
+      deleted: true 
+    }, (err, updated) => {
+      if(err) {
+        console.log(err);
+      }
+    })
+})
+
+app.post('/classToEditPost', (req, res) => {
+  let data = {
+    scores: req.body.scores,
+    weights: req.body.weights,
+    className: req.body.className,
+    id: req.body.id
+  }
+
+  res.send('done');
+
+  app.get('/classToEdit', (req1, res1) => {
+    res1.json(data);
+  })
+})
+
+app.post('/editClass', (req, res) => {
+  let newClassData = {
+    className: req.body.className,
+    scores: req.body.scores,
+    weights: req.body.weights
+  }
+
+  Class.updateOne({ _id: req.body.id }, newClassData, (err, updated) => {
+    if(err) {
+      console.log(err);
+      return;
+    }
+  })
+})
 
 app.listen(port, () => {
   console.log(`App is running at http://localhost:${port}`);
