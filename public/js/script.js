@@ -132,6 +132,7 @@ let app = new Vue({
     className: '',
     loginButtonText: "Log in",
     loginButtonHREF: "/login",
+    dbId: '',
     idNum: 0,
   },
   methods: {
@@ -440,24 +441,53 @@ let app = new Vue({
         return;
       }
       else {
-        axios.get('/user').then((response) => {
-          console.log("response:" + response.data.id);
-          axios.post('/saveClass', {
+        if(this.dbId === '') {
+          axios.get('/user').then((response) => {
+            console.log("response:" + response.data.id);
+            axios.post('/saveClass', {
+              className: this.className,
+              userId: response.data.id,
+              scores: scores,
+              weights: weights,
+              deleted: false
+            }).then((res) => {
+              window.location.href="/";
+            }).catch((err) => {
+              console.log(err);
+            })
+          })
+          .catch((err) => {
+            console.log(err);
+          })
+        }
+        else {
+          console.log('runnnnnnnnnnnnnn');
+          axios.post('/editClass', {
             className: this.className,
-            userId: response.data.id,
-            scores: scores,
-            weights: weights,
-            deleted: false
+            scores: this.scores,
+            weights: this.weights,
+            id: this.dbId
           }).then((res) => {
-            window.location.href="/";
+            console.log(res);
           }).catch((err) => {
             console.log(err);
           })
-        })
-        .catch((err) => {
-          console.log(err);
-        })
+
+          window.location.href = "/";
+        }
       }
+    },
+    checkForEdit: function() {
+      axios.get('/classToEdit').then((response) => {
+        if(!response.data) {
+          return;
+        }
+        else {
+          this.scores = response.data.scores;
+          this.weights = response.data.weights;
+          this.dbId = response.data.id;
+        }
+      })
     },
     switchToAssignments: function() {
       this.cycle += 1;
@@ -469,5 +499,6 @@ let app = new Vue({
   mounted() {
     this.getUser();
     this.changeLoginButton();
+    this.checkForEdit();
   }
 })

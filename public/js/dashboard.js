@@ -43,7 +43,19 @@ let app = new Vue({
         window.location.reload();
       }).catch((err) => {
         console.log(err);
-      })
+      });
+    },
+    redirectEdit: function(classId, scores, weights) {
+      axios.post('/classToEditPost', {
+        scores: scores,
+        weights, weights,
+        id: classId
+      }).then((response) => {
+        console.log(response);
+      }).catch((err) => {
+        console.log(err);
+      });
+      window.location.href = "/";
     }
   },
   beforeMount() {
