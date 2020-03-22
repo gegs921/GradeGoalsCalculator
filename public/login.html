@@ -6,34 +6,41 @@
     <title>Grade Goals Calculator - Login</title>
     <link href="css/style.css" rel="stylesheet" type="text/css">
     <link href="css/bulma.min.css" rel="stylesheet" type="text/css">
+    <link rel="stylesheet" href="https://unpkg.com/bulmaswatch/darkly/bulmaswatch.min.css">
     <link href="css/cloak.css" rel="stylesheet" type="text/css">
   </head>
   <body>
-    <div id="app" v-cloak>
-      <div class="field">
-        <h1 class="is-size-1">Login</h1>
-      </div>
-      <div class="field">
-        <label>Email</label>
-        <input type="email" class="input" v-model="email">
-      </div>
-      <div class="field">
-        <label>Password</label>
-        <input type="password" class="input" v-model="password">
-      </div>
-      <div class="field" v-if="errorShown === true && errorType === 1">
-        <article class="message is-danger">
-          <div class="message-header">
-            <p>Error</p>
-            <button class="delete" aria-label="delete" v-on:click="hideError"></button>
-          </div>
-          <div class="message-body">
-            {{ errorText }}
-          </div>
-        </article>
-      </div>
-      <div class="field">
-        <button class="button" v-on:click="post">Login</button>
+    <div class="container is-fluid vcentered" id="content">
+      <div id="app" v-cloak>
+        <div class="field">
+          <h1 class="is-size-1">Login</h1>
+        </div>
+        <div class="field">
+          <label>Email</label>
+        </div>
+        <div class="field">
+          <input type="email" class="input" v-model="email">
+        </div>
+        <div class="field">
+          <label>Password</label>
+        </div>
+        <div class="field">
+          <input type="password" class="input" v-model="password">
+        </div>
+        <div class="field" v-if="errorShown === true && errorType === 1">
+          <article class="message is-danger">
+            <div class="message-header">
+              <p>Error</p>
+              <button class="delete" aria-label="delete" v-on:click="hideError"></button>
+            </div>
+            <div class="message-body">
+              {{ errorText }}
+            </div>
+          </article>
+        </div>
+        <div class="field">
+          <button class="button" v-on:click="post">Login</button>
+        </div>
       </div>
     </div>
     <script src="https://unpkg.com/axios/dist/axios.min.js"></script>
