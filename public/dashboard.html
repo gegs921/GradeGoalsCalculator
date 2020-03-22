@@ -6,23 +6,23 @@
   <title>Document</title>
   <link href="css/style.css" rel="stylesheet" type="text/css">
   <link href="css/bulma.min.css" rel="stylesheet" type="text/css">
+  <link rel="stylesheet" href="https://unpkg.com/bulmaswatch/darkly/bulmaswatch.min.css">
   <link href="css/cloak.css" rel="stylesheet" type="text/css">
 </head>
 <body>
-  <div id="app" v-cloak>
-    <!-- <div class="field">
-      <ul>
-        <classes-comp v-for="actualClass in classes" :actualClass="actualClass">
-      </ul>
-    </div> -->
-    <div class="field">
-      <ul>
-        <div v-for="actualClass in classes" :key="actualClass.className">
-          <li>{{ actualClass.className }}</li>
-          <button class="button" v-on:click="deleteClassDB(actualClass._id)">Delete</button>
-          <button class="button" v-on:click="redirectEdit(actualClass._id, actualClass.scores, actualClass.weights)">Edit</button>
-        </li>
-      </ul>
+  <div id="app" class="content" v-cloak>
+    <div class="box">
+      <div class="field">
+        <ul>
+          <div v-for="actualClass in classes" :key="actualClass.className">
+            <div class="field box">
+              <h1 class="title">{{ actualClass.className }}</h1>
+              <button class="button" v-on:click="deleteClassDB(actualClass._id)">Delete</button>
+              <button class="button" v-on:click="redirectEdit(actualClass._id, actualClass.scores, actualClass.weights)">Edit</button>
+            </div>
+          </li>
+        </ul>
+      </div>
     </div>
   </div>
   <script src="https://unpkg.com/axios/dist/axios.min.js"></script>
