@@ -129,6 +129,7 @@ let app = new Vue({
     },
     cycle: 0,
     user: {},
+    loggedIn: false,
     className: '',
     loginButtonText: "Log in",
     loginButtonHREF: "/login",
@@ -405,7 +406,13 @@ let app = new Vue({
     },
     getUser: function() {
       axios.get('http://localhost:3000/user').then((response) => {
-        this.user = response;
+        if(response !== {}) {
+          this.user = response;
+          this.loggedIn = true;
+        }
+        else {
+          return;
+        }
       }).catch((error) => {
         console.log(error.response);
       })
