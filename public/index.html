@@ -28,10 +28,13 @@
             <a class="navbar-item" href="/">
               Home
             </a>
+            <a class="navbar-item" href="/dashboard" v-if="Object.keys(user).length !== 0"> 
+              Dashboard
+            </a>
           </div>
           <div class="navbar-end">
-            <a class="navbar-item">
-              {{ user.data.username }}
+            <a class="navbar-item" v-if="Object.keys(user).length !== 0">
+              {{ user.username }}
             </a>
             <div class="navbar-item">
               <div class="buttons">
