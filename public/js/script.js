@@ -406,14 +406,9 @@ let app = new Vue({
     },
     getUser: function() {
       axios.get('http://localhost:3000/user').then((response) => {
-        if(response !== {}) {
-          this.user = response;
-          this.loggedIn = true;
-        }
-        else {
-          return;
-        }
+        this.user = response.data;
       }).catch((error) => {
+        console.log("es corre");
         console.log(error.response);
       })
     },
@@ -422,7 +417,6 @@ let app = new Vue({
     },
     changeLoginButton: function() {
       axios.get('http://localhost:3000/user').then((response) => {
-        console.log(response);
         if (!response.data.email) {
           this.loginButtonText = "Log in";
         }
